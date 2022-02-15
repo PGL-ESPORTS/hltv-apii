@@ -13,6 +13,7 @@ got(vgmUrl).then(response => {
 var $ = cheerio.load(response.body);
 // console.log($.html());
 var div = Number(($(`.summary .col:nth-child(2) .value`).html()));
+
     resolve(div);
 // console.log(div);
 
