@@ -1,0 +1,36 @@
+{
+  "name": "hltv-apiii",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getMatch.js",
+  "dependencies": {
+    "aaxios": "^0.18.1",
+    "axios": "^0.21.4",
+    "basic-authorization-header": "^0.2.7",
+    "btoa": "^1.2.1",
+    "buffer": "^6.0.3",
+    "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "got": "^11.8.2",
+    "hltv": "^3.3.2",
+    "node-fetch": "^2.6.7",
+    "redis": "^3.1.2",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PGL-ESPORTS/hltv-apii.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PGL-ESPORTS/hltv-apii/issues"
+  },
+  "homepage": "https://github.com/PGL-ESPORTS/hltv-apii#readme"
+}
