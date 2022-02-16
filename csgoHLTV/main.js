@@ -2,50 +2,50 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 let http = new XMLHttpRequest();
 let variables = require('./variables.json');
 let getTeamPlayers = require('./getTeamPlayers');
-let  kdOnMap  = require("./kdOnMap");
+let kdOnMap  = require("./kdOnMap");
 let get1vs1Lost = require('./get1vs1Lost');  
 var team = "Natus Vincere";
-
+let saveRedis = require('./redis')
+let  getSteamID = require('./getSteamID');
+let makeSlug = require('./makeSlug.js');
 async function getPlayerById() {
 
- let data = await getTeamPlayers.getTeamPlayers(team);
+let data = await getTeamPlayers.getTeamPlayers(team);
   
-       var objectToParse ={};
-        objectToParse.players = [];
-        
+        let playersArray = [];
         (data.players).forEach(player =>{
                 
                 if(player.type == "Starter") {
 
-                    (objectToParse.players).push(player);
+                    (playersArray).push(player);
                 }
             })
 
-    let playerObj = {};
-    let players = objectToParse.players;
-    let playersName = [];
-    players.forEach(player => {
+    let playerObj = {}; //obiect {playerName : playerHLTVid} pt toti playerii din team.
+    let playersName = []; //arry cu numele lor
+    playersArray.forEach(player => {
     playersName.push(player['name']);
     playerObj[`${player['name']}`] = player['id'];
-
+ 
   });
-//   console.log(playerObj);
-  
+
   for (let i=0;i<playersName.length;i++) {
         let playerName = playersName[i];
       playerObject = {};
-      http.open("get", `https://www.hltv.org/api/event/player/${playerName}?startDate=2021-01-12&endDate=2021-07-01`, false, variables.username, variables.password);
+      http.open("get", `https://www.hltv.org/api/event/player/${playerName}?startDate=${variables.startData}&endDate=${variables.endData}`, false, variables.username, variables.password);
       http.send("");
       
       if (http.status == 200) {
 
           let playerData = JSON.parse(http.responseText);
-          playerObject.on1lose = await get1vs1Lost.get1vs1Lost(playerObj[playerName],playerName);
-          playerData.maps =  await kdOnMap.kdOnMap(playerName);
-          playerData.on1lost  = playerObject.on1lose;
-          console.log(playerData);
+          playerData.on1lost = await get1vs1Lost.get1vs1Lost(playerObj[playerName],playerName); //pt obtinerea clutchurile 1 vs 1 pierdute
+          playerData.maps =  await kdOnMap.kdOnMap(playerName); //pt obtinerea KD-ului pe ficare mapa.
+         
+          playerData.steamID =  await getSteamID.getSteamID(`${makeSlug.makeSlug(playerName)}`);
+         
+        //   console.log(playerData); //obiectul final pt fiecare player
           var redisObj = JSON.stringify(playerData);
-          // saveRedis.saveRedis(team, playerData.nick, redisObj);
+          saveRedis.saveRedis(team, playerData.steamID, redisObj);
 
       } else {
           // console.log("⚠️ Authentication failed.");

@@ -3,5 +3,7 @@
     "username" : "pgl",
     "password" : "Hm2faD75vbvXBEq3",
     "redisIp" : "localhost",
-    "redisPass" : ""
+    "redisPass" : "",
+    "startData" : "2021-01-12",
+    "endData" : "2021-07-01"
 }
