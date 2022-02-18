@@ -12,7 +12,6 @@ let makeSlug = require('./makeSlug.js');
 async function getPlayerById() {
 
     let data = await getTeamPlayers.getTeamPlayers(team);
-  
     let playersArray = [];
     (data.players).forEach(player =>{
                 
@@ -39,12 +38,18 @@ async function getPlayerById() {
         if (http.status == 200) {
 
             let playerData = JSON.parse(http.responseText);
+            
             playerData.on1lost = await get1vs1Lost.get1vs1Lost(playerObj[playerName],playerName); //pt obtinerea clutchurile 1 vs 1 pierdute
-            playerData.maps =  await kdOnMap.kdOnMap(playerName); //pt obtinerea KD-ului pe ficare mapa.
+                       
             playerData.steamID =  await getSteamID.getSteamID(`${makeSlug.makeSlug(playerName)}`);
-              console.log(playerData); //obiectul final pt fiecare player
+            let mapsKD = await kdOnMap.kdOnMap(playerName);
+            playerData.mapsKD = mapsKD//pt obtinerea KD-ului pe ficare mapa.
+           
+            console.log(playerData);
+            // console.log( kdOnMap.kdOnMap(playerName));
             let redisObj = JSON.stringify(playerData);
-            saveRedis.saveRedis(team, playerData.steamID, redisObj);
+           
+            await saveRedis.saveRedis(team, playerData.steamID, redisObj);
 
         } else {
             // console.log("⚠️ Authentication failed.");

@@ -18,7 +18,7 @@ var redis = require("redis");
                     
                     if(player === playerID ) {
                             resolve(playersID[player])
-                            console.log(playersID[player]);
+                           
                     }
                 });                 
             })         

@@ -9,7 +9,12 @@ async function kdOnMap(playerName) {
         
     return new Promise((resolve, reject) => { 
         let playerMapData = {};
-        let playerMaps = [];
+        let playerMaps = {};
+
+        for(let i=0;i<maps.length;i++) {
+
+        }
+
         maps.forEach(map =>{
 
 
